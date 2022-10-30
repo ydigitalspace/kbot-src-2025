@@ -9,7 +9,7 @@ FROM builder AS build
 ARG APP_BUILD_INFO
 ARG TARGETOS
 ARG TARGETARCH
-RUN VERSION=$(git describe --tags --abbrev=0) && \
+RUN VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse HEAD|cut -c1-7) && \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=arm  \
     go build -o app -a -installsuffix cgo \ 
     -ldflags "-X="github.com/den-vasyliev/kbot/cmd.appVersion=${APP_BUILD_INFO} -v ./...
