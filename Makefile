@@ -3,9 +3,10 @@
 all: build 
 test: unit-test
 
-PLATFORM=arm
-
 BUILDER=docker
+PLATFORM=linux
+TARGETARCH=arm64
+VERSION=$(git describe --tags --abbrev=0)-$(git rev-parse HEAD|cut -c1-7)
 
 build:
 	@echo "Let's build it"
