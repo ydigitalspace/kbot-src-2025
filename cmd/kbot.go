@@ -20,9 +20,9 @@ var (
 
 // kbotCmd represents the kbot command
 var kbotCmd = &cobra.Command{
-	Use:   "kbot",
-	Aliases: []string{"serve","server"},
-	Short: "A brief description of your command",
+	Use:     "kbot",
+	Aliases: []string{"start"},
+	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -40,7 +40,7 @@ to quickly create a Cobra application.`,
 		})
 
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("Plaese check TELE_TOKEN env variable. %s", err)
 			return
 		}
 		err = rpio.Open()
@@ -70,6 +70,8 @@ to quickly create a Cobra application.`,
 			payload := m.Message().Payload
 
 			switch payload {
+			case "hello":
+				err = m.Send(fmt.Sprintf("Hello I'm Kbot %s!", appVersion))
 
 			case "red", "amber", "green":
 
@@ -83,8 +85,6 @@ to quickly create a Cobra application.`,
 					trafficSignal[payload]["on"] = 0
 				}
 				err = m.Send(fmt.Sprintf("Switch %s light signal to %d", payload, trafficSignal[payload]["on"]))
-			case "hello":
-				err = m.Send(fmt.Sprintf("Hello I'm Kbot %s!", appVersion))
 
 			default:
 				err = m.Send("Usage: /s red|amber|green")
