@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kbot
+  labels:
+    app: kbot
+spec:
+  selector:
+    matchLabels:
+      app: kbot
+  template:
+    metadata:
+      name: kbot
+      labels:
+        app: kbot
+    spec:
+      dnsConfig:
+        nameservers:
+          - 1.1.1.1
+      containers:
+      - env:
+        - name: TELE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: kbot
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        name: kbot
+        resources: {}
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - mountPath: /dev/mem
+          name: dev-mem
+      volumes:
+      - hostPath:
+          path: /dev/mem
+          type: ""
+        name: dev-mem
