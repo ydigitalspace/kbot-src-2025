@@ -27,14 +27,3 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: IfNotPresent
         name: kbot
-        resources: {}
-        securityContext:
-          privileged: true
-        volumeMounts:
-        - mountPath: /dev/mem
-          name: dev-mem
-      volumes:
-      - hostPath:
-          path: /dev/mem
-          type: ""
-        name: dev-mem
