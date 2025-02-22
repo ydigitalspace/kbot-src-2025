@@ -40,7 +40,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
               type=ref,event=pr
-              type=sha
+              type=sha,format=long
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
