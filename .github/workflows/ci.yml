@@ -38,7 +38,7 @@ jobs:
       - name: Extract real PR branch
         run: |
           echo "PR_BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
-          echo "IMAGE_TAG=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "PR_COMMIT=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
 
 
       - name: Extract metadata (tags, labels) for Docker
@@ -48,7 +48,7 @@ jobs:
           context: workflow
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,value=${{ env.IMAGE_TAG }}
+            type=raw,value=${{ env.PR_COMMIT }}
             type=raw,value=${{ env.PR_BRANCH }}
             type=ref,event=pr
             type=sha,format=long
