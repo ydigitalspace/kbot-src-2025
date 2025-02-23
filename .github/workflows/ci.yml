@@ -50,9 +50,6 @@ jobs:
           tags: |
             type=raw,value=${{ env.PR_COMMIT }}
             type=raw,value=${{ env.PR_BRANCH }}
-            type=ref,event=pr
-            type=sha,format=long
-
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
