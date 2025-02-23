@@ -1,29 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kbot
+  name: {{ template "helm.fullname" . }}
   labels:
-    app: kbot
+    {{- include "helm.labels" . | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      app: kbot
+      {{- include "helm.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      name: kbot
       labels:
-        app: kbot
+        {{- include "helm.selectorLabels" . | nindent 8 }}
     spec:
+      {{- with .Values.dns }}
       dnsConfig:
         nameservers:
-          - 1.1.1.1
+          {{- toYaml .nameservers | nindent 10 }}
+      {{- end }}
       containers:
-      - env:
+      - name: {{ .Values.app.name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
         - name: TELE_TOKEN
           valueFrom:
             secretKeyRef:
-              key: token
-              name: kbot
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: IfNotPresent
-        name: kbot
+              name: {{ .Values.secretName }}
+              key: {{ .Values.telegramTokenKey }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.app.port }}
+          protocol: TCP
