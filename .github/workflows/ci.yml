@@ -43,7 +43,6 @@ jobs:
           context: git
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=pr
             type=sha,format=long
 
       - name: Build and push Docker image
