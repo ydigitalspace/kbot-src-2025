@@ -40,9 +40,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          context: .
+          context: workflow
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            type=ref,event=pr
             type=sha,format=long
 
       - name: Build and push Docker image
