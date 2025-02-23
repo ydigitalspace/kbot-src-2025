@@ -1,19 +1,15 @@
 image:
   repository: ghcr.io/den-vasyliev/kbot-src
-  tag: sha-xxxxxx
+  tag: ""
   pullPolicy: IfNotPresent
-
 nameOverride: ""
 fullnameOverride: ""
-
 app:
   name: kbot
   port: 8080
-
 service:
   type: ClusterIP
   port: 8080
-
 gateway:
   hostname: "kbot.example.com"
   parentGateway: "eg"
@@ -21,6 +17,5 @@ gateway:
 dns:
   nameservers:
     - "1.1.1.1"
-
 secretName: kbot
 telegramTokenKey: token
