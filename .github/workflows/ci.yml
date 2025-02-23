@@ -40,6 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
+          context: git
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=ref,event=pr
