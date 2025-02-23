@@ -2,8 +2,6 @@ module github.com/den-vasyliev/kbot
 
 go 1.21
 
-toolchain go1.23.1
-
 require (
 	github.com/spf13/cobra v1.6.1
 	github.com/stianeikeland/go-rpio v4.2.0+incompatible
