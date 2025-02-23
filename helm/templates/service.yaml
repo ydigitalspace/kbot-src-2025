@@ -30,8 +30,8 @@ spec:
   - backendRefs:
     - group: ""
       kind: Service
-      name: kbot-helm
-      port: 8080
+      name: {{ template "helm.fullname" . }}
+      port: {{ .Values.app.port }}
       weight: 1
     {{- with .Values.filters }}
     {{- toYaml . | nindent 4 }}
