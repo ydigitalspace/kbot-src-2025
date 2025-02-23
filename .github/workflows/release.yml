@@ -68,9 +68,6 @@ jobs:
         run: |
           VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
           yq e -i '.image.tag = strenv(VERSION)' helm/values.yaml
-          
-      - name: Commit values.yaml changes
-        run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
           git add helm/values.yaml
