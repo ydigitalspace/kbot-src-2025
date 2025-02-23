@@ -18,9 +18,13 @@ gateway:
   hostname: "kbot.example.com"
   parentGateway: "eg"
   weight: 1
+  path: /
+
 dns:
   nameservers:
     - "1.1.1.1"
 
 secretName: kbot
 telegramTokenKey: token
+
+filters: {}

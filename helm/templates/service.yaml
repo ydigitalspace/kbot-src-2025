@@ -27,13 +27,16 @@ spec:
   hostnames:
     - {{ .Values.gateway.hostname | quote }}
   rules:
-    - backendRefs:
-        - group: ""
-          kind: Service
-          name: {{ template "helm.fullname" . }}
-          port: {{ .Values.service.port }}
-          weight: {{ .Values.gateway.weight }}
-      matches:
-        - path:
-            type: PathPrefix
-            value: /
+  - backendRefs:
+    - group: ""
+      kind: Service
+      name: kbot-helm
+      port: 8080
+      weight: 1
+    {{- with .Values.filters }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    matches:
+    - path:
+        type: PathPrefix
+        value: {{ .Values.gateway.path }}
