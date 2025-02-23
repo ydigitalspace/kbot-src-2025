@@ -35,6 +35,8 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract real PR branch
+        run: echo "PR_BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -43,8 +45,10 @@ jobs:
           context: workflow
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
+            type=raw,value=${{ env.PR_BRANCH }}
             type=ref,event=pr
             type=sha,format=long
+
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
