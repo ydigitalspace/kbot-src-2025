@@ -74,11 +74,12 @@ jobs:
           mkdir -p ${REPOSITORY_ROOT}/dist/helm
 
       - name: Package Helm chart
+        id: package
         run: |
           VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
-          helm package helm/ --version $VERSION --app-version $VERSION -d ${REPOSITORY_ROOT}/dist/helm
+          CHART_PATH=$(helm package helm/ --version $VERSION --app-version $VERSION -d ${REPOSITORY_ROOT}/dist/helm | cut -d: -f2 | tr -d ' ')
+          echo "CHART_PATH=${CHART_PATH}" >> $GITHUB_ENV
 
       - name: Push Helm chart
         run: |
-          VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
-          helm push ${REPOSITORY_ROOT}/dist/helm/${GITHUB_REPOSITORY#*/}-$VERSION.tgz oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts 
+          helm push ${CHART_PATH} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts 
