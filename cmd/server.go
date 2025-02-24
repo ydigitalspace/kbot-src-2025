@@ -32,13 +32,16 @@ func startServer() {
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		switch string(ctx.Path()) {
 		case "/":
+			log.Printf("Received request to /")
 			ctx.SetContentType("text/plain")
 			welcomeMsg := fmt.Sprintf("Welcome to kbot server!\nVersion: %s", appVersion)
 			ctx.WriteString(welcomeMsg)
 		case "/health":
+			log.Printf("Received request to /health")
 			ctx.SetContentType("application/json")
 			ctx.WriteString(`{"status": "ok"}`)
 		default:
+			log.Printf("Received request to %s", ctx.Path())
 			ctx.Error("Not found", fasthttp.StatusNotFound)
 		}
 	}
