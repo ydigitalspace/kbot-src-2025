@@ -42,7 +42,7 @@ func startServer() {
 			ctx.WriteString(`{"status": "ok"}`)
 		default:
 			log.Printf("Received request to %s", ctx.Path())
-			ctx.Error("Not found", fasthttp.StatusNotFound)
+			ctx.WriteString(`{"error": "Not found"}`)
 		}
 	}
 
