@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -35,15 +37,21 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract real PR branch
+        run: |
+          echo "PR_BRANCH=${{ github.event.pull_request.head.ref }}" >> $GITHUB_ENV
+          echo "PR_COMMIT=${{ github.event.pull_request.head.sha }}" >> $GITHUB_ENV
+
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
+          context: workflow
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=pr
-            type=sha,format=long
+            type=raw,value=${{ env.PR_COMMIT }}
+            type=raw,value=${{ env.PR_BRANCH }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
