@@ -22,4 +22,10 @@ dns:
 secretName: kbot
 telegramTokenKey: token
 
-filters: {}
+filters:
+  filters:
+  - type: URLRewrite
+    urlRewrite:
+      path:
+        replacePrefixMatch: /
+        type: ReplacePrefixMatch
