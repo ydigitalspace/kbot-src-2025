@@ -12,7 +12,8 @@ service:
   port: 8080
 gateway:
   hostname: "kbot.example.com"
-  parentGateway: "eg"
+  parentGatewayName: "eg"
+  parentGatewayNamespace: "default"
   weight: 1
   path: /
 
