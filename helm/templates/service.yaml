@@ -24,7 +24,7 @@ metadata:
 spec:
   parentRefs:
     - name: {{ .Values.gateway.parentGatewayName }}
-    - namespace: {{ .Values.gateway.parentGatewayNamespace }}
+      namespace: {{ .Values.gateway.parentGatewayNamespace }}
   hostnames:
     - {{ .Values.gateway.hostname | quote }}
   rules:
