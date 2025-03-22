@@ -8,7 +8,7 @@ COPY . .
 RUN export GOPATH=/go
 RUN go get -d -v .
 RUN gofmt -s -w ./
-RUN APP_BUILD_INFO=$(git describe --tags --abbrev=0)-${APP_BUILD_INFO}-${TARGETARCH} && \
+RUN APP_BUILD_INFO=$(git describe --tags --abbrev=0)-$(echo -n ${APP_BUILD_INFO}|cut -c1-7)-${TARGETARCH} && \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH}  \
     go build -v -o kbot\ 
     -ldflags "-X="github.com/den-vasyliev/kbot/cmd.appVersion=${APP_BUILD_INFO} 
