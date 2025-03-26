@@ -58,7 +58,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: APP_BUILD_INFO=$(echo '${{ steps.meta.outputs.labels }}' | grep 'org.opencontainers.image.revision=' | cut -d'=' -f2)"
+          build-args: ${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
           
 
       - name: Install Helm
