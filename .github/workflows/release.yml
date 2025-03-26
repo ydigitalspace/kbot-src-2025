@@ -58,6 +58,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: APP_BUILD_INFO=$(echo '${{ steps.meta.outputs.labels }}' | grep 'org.opencontainers.image.revision=' | cut -d'=' -f2)"
+          
 
       - name: Install Helm
         uses: azure/setup-helm@v3
