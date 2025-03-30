@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 env:
   REGISTRY: ghcr.io
@@ -35,27 +35,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get the latest tag
-        id: get_latest_tag
-        run: |
-          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-
-      - name: Increment version
-        id: increment_version
-        run: |
-          LATEST_TAG=${{ env.LATEST_TAG }}
-          VERSION=$(echo $LATEST_TAG | awk -F. -v OFS=. '{$NF++; print}')
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "New version: $VERSION"
-
-      - name: Create a new tag
-        id: tag
-        run: |
-          VERSION=${{ steps.increment_version.outputs.VERSION }}
-          git tag -a "v$VERSION" -m "Release $VERSION"
-          git push origin "v$VERSION"
-
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
@@ -80,6 +59,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: APP_BUILD_INFO=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+          
 
       - name: Install Helm
         uses: azure/setup-helm@v3
@@ -88,7 +68,7 @@ jobs:
 
       - name: Update Helm values with new image tag
         run: |
-          export VERSION=${{ steps.increment_version.outputs.VERSION }}
+          export VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
           yq e -i '.image.tag = strenv(VERSION)' helm/values.yaml
           cat helm/values.yaml
 
@@ -99,10 +79,10 @@ jobs:
       - name: Package Helm chart
         id: package
         run: |
-          VERSION=${{ steps.increment_version.outputs.VERSION }}
+          VERSION=$(echo ${{ github.ref_name }} | sed 's/^v//')
           CHART_PATH=$(helm package helm/ --version $VERSION --app-version $VERSION -d ${REPOSITORY_ROOT}/dist/helm | cut -d: -f2 | tr -d ' ')
           echo "CHART_PATH=${CHART_PATH}" >> $GITHUB_ENV
 
       - name: Push Helm chart
         run: |
-          helm push ${CHART_PATH} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts
+          helm push ${CHART_PATH} oci://${{ env.REGISTRY }}/${{ github.repository_owner }}/charts 
