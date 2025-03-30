@@ -13,7 +13,7 @@ service:
 gateway:
   hostname: "kbot.example.com"
   parentGatewayName: "eg"
-  parentGatewayNamespace: "default"
+  parentGatewayNamespace: "envoy-gateway-system"
   weight: 1
   path: /
 
