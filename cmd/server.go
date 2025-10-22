@@ -34,7 +34,7 @@ func startServer() {
 		case "/":
 			log.Printf("Received request to /")
 			ctx.SetContentType("text/plain")
-			welcomeMsg := fmt.Sprintf("Welcome to kbot server!\nVersion: %s", appVersion)
+			welcomeMsg := fmt.Sprintf("Welcome to kbot clone server!\nVersion: %s", appVersion)
 			ctx.WriteString(welcomeMsg)
 		case "/health":
 			log.Printf("Received request to /health")
