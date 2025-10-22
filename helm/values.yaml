@@ -1,6 +1,6 @@
 image:
-  repository: ghcr.io/den-vasyliev/kbot-src
-  tag: ""
+  repository: ghcr.io/ydigitalspace/kbot-src-2025
+  tag: "latest"
   pullPolicy: IfNotPresent
 nameOverride: ""
 fullnameOverride: ""
